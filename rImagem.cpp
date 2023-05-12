@@ -6,13 +6,14 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "imagem_proj1.pgm"
+#include <algorithm>
+
 
 using namespace std;
 
 vector<vector<int>> ReadImage(string filename);
 
-vector Histograma(string filename);
+auto Histograma(string filename);
 
 auto Media (vector<vector<int>> M);
 
@@ -79,9 +80,9 @@ vector<vector<int>> ReadImage(string filename){
     return M;
 }
 
-vector Histograma(string filename){
-    // Criar vector de inteiros, ColourFreq, com a dimensao do numero de cores n+1, da cor preta a cor branca passando pelos cinzentos
+auto Histograma(string filename){
 
+    // Criar vector de inteiros, ColourFreq, com a dimensao do numero de cores n+1, da cor preta a cor branca passando pelos cinzentos
     vector<int> ColourFreq(N+1);
 
     for (int i = 0; i < ReadImage(filename).size(); i++) { // loop externo percorre as linhas da matriz
@@ -89,23 +90,39 @@ vector Histograma(string filename){
             ColourFreq[ReadImage(filename)[i][j]] += 1;
         }
     }
-    cout << ColourFreq;
+    cout << ColourFreq << endl;
 
-    int maximo = *max_element(ColourFreq.begin(), ColourFreq.end());
-    cout << maximo;
+    // Determinar a cor mais frequente
+    int maximo = max_element(ColourFreq.begin(), ColourFreq.end());
+    int indice_maximo = distance(ColourFreq.begin(), maximo);
+    cout << "A cor mais frequente é " << indice_maximo;
+
+    // Somar todos os valores do vetor ColourFreq
+    int total = 0;
+    for (int i = 0; i < ColourFreq.size(); i++) {
+        total += ColourFreq[i];
+    }
+
+    //Criar um novo vetor para armazenar as frequências relativas em porcentagem
+    vector<double> freq_relativa(ColourFreq.size());
+
+    //Calcular as frequências relativas em percentagem
+    for (int i = 0; i < ColourFreq.size(); i++) {
+        freq_relativa[i] = ColourFreq[i] / total * 100;
+    }
+    cout << "Frequências Relativas: "<< freq_relativa << endl;
 }
 
 //Calcular valor médio e variância da imagem
-
 auto Media (vector<vector<int>> M){
     // Calcular a cor média da imagem
 
     int sum = 0;
-    int count = 0;
+    int contador = 0;
     for(int i=0; i<nrows; i++){
         for(int j=0; j<ncols; j++){
             sum += M[i][j];
-            count++;
+            contador++;
         }
     }
     int media = sum/count;
@@ -172,7 +189,7 @@ auto EliminarRuido (vector<vector<int>> M){
 // Calcular a variância da imagem sem ruído
 
 auto Variancia (){
-    
+
     ReadImage("glassware_reduced_noise.ascii.pgm");
 
     // Calcular a variância da imagem
