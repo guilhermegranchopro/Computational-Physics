@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <iterator>
 
-
 using namespace std;
 
 vector<vector<int>> ReadImage(string filename);
@@ -84,6 +83,7 @@ vector<vector<int>> ReadImage(string filename){
 auto Histograma(string filename){
 
     // Criar vector de inteiros, ColourFreq, com a dimensao do numero de cores n+1, da cor preta a cor branca passando pelos cinzentos
+
     vector<int> ColourFreq(N+1);
 
     for (int i = 0; i < ReadImage(filename).size(); i++) { // loop externo percorre as linhas da matriz
@@ -94,27 +94,31 @@ auto Histograma(string filename){
     cout << ColourFreq << endl;
 
     // Determinar a cor mais frequente
+
     int maximo = max_element(ColourFreq.begin(), ColourFreq.end());
     int indice_maximo = distance(ColourFreq.begin(), maximo);
     cout << "A cor mais frequente é " << indice_maximo;
 
     // Somar todos os valores do vetor ColourFreq
+
     int total = 0;
     for (int i = 0; i < ColourFreq.size(); i++) {
         total += ColourFreq[i];
     }
 
-    //Criar um novo vetor para armazenar as frequências relativas em porcentagem
+    // Criar um novo vetor para armazenar as frequências relativas em porcentagem
+
     vector<double> freq_relativa(ColourFreq.size());
 
-    //Calcular as frequências relativas em percentagem
+    // Calcular as frequências relativas em percentagem
     for (int i = 0; i < ColourFreq.size(); i++) {
         freq_relativa[i] = ColourFreq[i] / total * 100;
     }
     cout << "Frequências Relativas: "<< freq_relativa << endl;
 }
 
-//Calcular valor médio e variância da imagem
+// Calcular valor médio e variância da imagem
+
 auto Media (vector<vector<int>> M){
     // Calcular a cor média da imagem
 
@@ -204,4 +208,3 @@ auto Variancia (){
     int variancia = sum2/count;
     //cout << "A variância da imagem é: " << variancia << endl;
 }
-
