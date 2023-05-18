@@ -139,13 +139,13 @@ vector<double> MediaVariancia(Image Original){
 
 void salvarImagemPGM(const string& nomeArquivo, vector<vector<int>> principal, int width, int height, int WhiteValue){
 
-    ofstream arquivo(nomeArquivo, std::ios::binary);
+    ofstream arquivo(nomeArquivo, ios::binary);
     int a = 0;
 
-    // Escreve o cabe√ßalho PGM no arquivo
-    arquivo << "P2" << std::endl;
-    arquivo << width << " " << height << std::endl;
-    arquivo << WhiteValue << std::endl;
+    // Escreve o cabeÁalho PGM no arquivo
+    arquivo << "P2" << endl;
+    arquivo << width << " " << height << endl;
+    arquivo << WhiteValue << endl;
 
     // Escreve os pixels da imagem no arquivo
     for (unsigned y = 0; y < height; y++) {
