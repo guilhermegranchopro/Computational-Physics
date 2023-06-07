@@ -33,6 +33,9 @@ public:
     lightmap(lightsource S, array<int,2> ncell, array<float,2> size);
     lightmap(lightsource S, array<int,2> ncell, array<float,2> size, bool YN);
     lightmap(lightsource S, array<int,2> ncell, array<float,2> size, bool YN1, bool YN2);
+    lightmap(vector<lightsource> vS, array<int,2> ncell, array<float,2> size);
+    lightmap(vector<lightsource> vS, array<int,2> ncell, array<float,2> size, bool YN);
+    lightmap(vector<lightsource> vS, array<int,2> ncell, array<float,2> size, bool YN1, bool YN2);
 
 // getters
     pair<int,int> GetCellIndex(float x, float y) const; // return cell indices
@@ -64,7 +67,7 @@ private:
     vector<vector<cell>> GRID; // cell grid
     int Totalncell, ncols, nrows;
     float TotalGridArea;
-    lightsource S;
+    vector<lightsource> S;
     vector<cell> vGRID;
     float L;
     float sizeX, sizeY;
@@ -102,9 +105,9 @@ lightmap::lightmap(lightsource S, array<int,2> ncell, array<float,2> size){
         for (int j=0; j<ncols; j++){
             cell C;
             C.area =TotalGridArea/Totalncell;
-            C.power = CellPower(C);
             position = GetCellCoo(j, i);
             C.center_coo = {position.first, position.second, 0};
+            C.power = CellPower(C);
             GRID[i][j] = C;
             vGRID[a] = C;
             a++;
@@ -133,9 +136,9 @@ lightmap::lightmap(lightsource S, array<int,2> ncell, array<float,2> size, bool 
         for (int j=0; j<ncols; j++){
             cell C;
             C.area =TotalGridArea/Totalncell;
-            C.power = CellPower(C);
             position = GetCellCoo(j, i);
             C.center_coo = {position.first, position.second, 0};
+            C.power = CellPower(C);
             GRID[i][j] = C;
             vGRID[a] = C;
             a++;
@@ -174,9 +177,9 @@ lightmap::lightmap(lightsource S, array<int,2> ncell, array<float,2> size, bool 
         for (int j=0; j<ncols; j++){
             cell C;
             C.area =TotalGridArea/Totalncell;
-            C.power = CellPower(C);
             position = GetCellCoo(j, i);
             C.center_coo = {position.first, position.second, 0};
+            C.power = CellPower(C);
             GRID[i][j] = C;
             vGRID[a] = C;
             a++;
@@ -199,6 +202,123 @@ lightmap::lightmap(lightsource S, array<int,2> ncell, array<float,2> size, bool 
     }
 
 }
+
+lightmap::lightmap(vector<lightsource> vS, array<int,2> ncell, array<float,2> size){
+    pair <float,float> position;
+    int a=0;
+
+    sizeX = size[0];
+    sizeY = size[1];
+    TotalGridArea = size[0]*size[1];
+    Totalncell = ncell[0]*ncell[1];
+    L = sqrt(TotalGridArea/Totalncell);
+    vGRID = vector<cell>(Totalncell);
+    ncols = ncell[0];
+    nrows = ncell[1];
+    GRID = vector<vector<cell>>(ncell[1], vector<cell>(ncell[0]));
+    S = std::move(vS);
+
+    for (int i=0; i<nrows; i++){
+        for (int j=0; j<ncols; j++){
+            cell C;
+            C.area =TotalGridArea/Totalncell;
+            position = GetCellCoo(j, i);
+            C.center_coo = {position.first, position.second, 0};
+            C.power = CellPower(C);
+            GRID[i][j] = C;
+            vGRID[a] = C;
+            a++;
+        }
+    }
+    SortOFPower();
+
+};
+
+lightmap::lightmap(vector<lightsource> vS, array<int,2> ncell, array<float,2> size, bool YN){
+    pair <float,float> position;
+    int a = 0;
+
+    sizeX = size[0];
+    sizeY = size[1];
+    TotalGridArea = size[0]*size[1];
+    Totalncell = ncell[0]*ncell[1];
+    L = sqrt(TotalGridArea/Totalncell);
+    vGRID = vector<cell>(Totalncell);
+    ncols = ncell[0];
+    nrows = ncell[1];
+    GRID = vector<vector<cell>>(ncell[1], vector<cell>(ncell[0]));
+    S = std::move(vS);
+
+    for (int i=0; i<nrows; i++){
+        for (int j=0; j<ncols; j++){
+            cell C;
+            C.area =TotalGridArea/Totalncell;
+            position = GetCellCoo(j, i);
+            C.center_coo = {position.first, position.second, 0};
+            C.power = CellPower(C);
+            GRID[i][j] = C;
+            vGRID[a] = C;
+            a++;
+        }
+    }
+    SortOFPower();
+
+    if (YN){
+        cout<<endl;
+        cout<<"Quociente entre a potencia maxima e a potencia da celula correspondente a mediana das potencias:"<<endl;
+        cout<<ResultCalculator()<<endl;
+        cout<<endl;
+        cout<<"Potencia total incidente no plano:"<<endl;
+        cout<<totalPower()<<endl;
+        cout<<endl;
+    }
+
+};
+
+lightmap::lightmap(vector<lightsource> vS, array<int,2> ncell, array<float,2> size, bool YN1, bool YN2){
+    pair <float,float> position;
+    int a = 0;
+
+    sizeX = size[0];
+    sizeY = size[1];
+    TotalGridArea = size[0]*size[1];
+    Totalncell = ncell[0]*ncell[1];
+    L = sqrt(TotalGridArea/Totalncell);
+    vGRID = vector<cell>(Totalncell);
+    ncols = ncell[0];
+    nrows = ncell[1];
+    GRID = vector<vector<cell>>(ncell[1], vector<cell>(ncell[0]));
+    S = std::move(vS);
+
+    for (int i=0; i<nrows; i++){
+        for (int j=0; j<ncols; j++){
+            cell C;
+            C.area =TotalGridArea/Totalncell;
+            position = GetCellCoo(j, i);
+            C.center_coo = {position.first, position.second, 0};
+            C.power = CellPower(C);
+            GRID[i][j] = C;
+            vGRID[a] = C;
+            a++;
+        }
+    }
+    SortOFPower();
+
+    if (YN1){
+        cout<<endl;
+        cout<<"Quociente entre a potencia maxima e a potencia da celula correspondente a mediana das potencias:"<<endl;
+        cout<<ResultCalculator()<<endl;
+        cout<<endl;
+        cout<<"Potencia total incidente no plano:"<<endl;
+        cout<<totalPower()<<endl;
+        cout<<endl;
+    }
+
+    if (YN2){
+        histogram();
+    }
+
+};
 
 // getters
 pair<int,int> lightmap::GetCellIndex(float x, float y) const{
@@ -251,7 +371,7 @@ array<float,3> lightmap::GetNormal(){
 
 // other functions
 void lightmap::AddLightSource(lightsource SAdd){
-    S = SAdd;
+    S.push_back(SAdd);
 }
 
 const cell& lightmap::GetMaxCell(){
@@ -270,21 +390,27 @@ array <float, 4> lightmap::distance2cell(array<float,3> SourceCoo, array<float,3
 }
 
 float lightmap::Irradiance(array<float,3> PointCoo){
-    float Irrad, ProdutoInterno=0;
-    array<float,3> ProduteOfCoo = {0,0,0};
-    array<float,4> vetorLStoCell = distance2cell(S.coo, PointCoo);
+    array<float,4> vetorLStoCell;
+    array<float,3> r;
+    array<float,3> ProduteOfCoo;
+    float Irrad, ProdutoInterno, SumIrrad = 0;
     array<float,3> n = GetNormal();
-    array<float,3> r = {0,0,0};
 
-    for (int a=0; a<3; a++){
-        r[a] = vetorLStoCell[a]/vetorLStoCell[3];
-        ProduteOfCoo[a] = (r[a]*GetNormal()[a]);
-        ProdutoInterno += ProduteOfCoo[a];
+    for (int b = 0; b<S.size(); b++){
+        vetorLStoCell = distance2cell(S[b].coo, PointCoo);
+        r = {0,0,0};
+        ProduteOfCoo = {0,0,0};
+        ProdutoInterno = 0;
+        for (int a=0; a<3; a++){
+            r[a] = vetorLStoCell[a]/vetorLStoCell[3];
+            ProduteOfCoo[a] = (r[a]*GetNormal()[a]);
+            ProdutoInterno += ProduteOfCoo[a];
+        }
+        Irrad = static_cast<float>(( (S[b].power) / (4 * M_PI) ) * ( ProdutoInterno / pow(vetorLStoCell[3],2) ));
+        SumIrrad += Irrad;
     }
 
-    Irrad = static_cast<float>(( (S.power) / (4 * M_PI) ) * ( ProdutoInterno / pow(vetorLStoCell[3],2) ));
-
-    return Irrad;
+    return SumIrrad;
 }
 
 float lightmap::CellPower(const cell& C){

@@ -8,7 +8,8 @@ int main(){
     array<float,2> size = {200, 300};
     S.power = 100;
 
-    S.coo = {100,150,100};
+    lightsource S2{};
+    S.coo = {100, 150, 100};
     lightmap LM10(S, Getncell(size, 10), size, true, true);
 
     int a = 0;

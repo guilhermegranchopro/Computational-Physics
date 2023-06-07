@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include <ostream>
 #include "TGraph.h"
 #include "TH2F.h"
 #include "TCanvas.h"
