@@ -35,8 +35,10 @@ struct lightsource {
 class lightmap {
 public:
 
+    
 ////////////////////////////////// IMPLEMENTAÇÃO ////////////////////////////////
 
+    
 ////////// Constructors //////////
 
 // Allow you to create a light map with different settings
@@ -107,7 +109,6 @@ private:
 
 
 ////////// Constructors //////////
-
 
 
 // Base constructor that creates the light map
