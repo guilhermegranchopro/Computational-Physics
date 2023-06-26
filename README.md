@@ -1,2 +1,0 @@
-# Fisica-Computacional
-Física Computacional
